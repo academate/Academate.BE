@@ -1,4 +1,5 @@
-﻿using Domain.ValueObjects;
+﻿using Domain.Exception;
+using Domain.ValueObjects;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 using System;
@@ -23,6 +24,11 @@ namespace hosting.MiddleWares
             try
             {
                 await _next(httpContext);
+            }
+            catch (DomainException domainException)
+            {
+                _logger.Error("Domain exception thrown", domainException);
+                throw;
             }
             catch (Exception ex)
             {
