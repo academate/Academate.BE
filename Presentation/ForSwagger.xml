@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Presentation</name>
+    </assembly>
+    <members>
+        <member name="M:Presentation.Controllers.UsersController.Authenticate(Presentation.ViewModels.CredentialViewModel)">
+            <summary>
+            Generate Authentication Token.
+            </summary>
+            <param name="credential">User Credentials</param>
+            <response code="200">Authentication passed</response>
+            <response code="400">Authentication failed</response>
+            
+        </member>
+    </members>
+</doc>
