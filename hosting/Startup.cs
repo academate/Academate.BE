@@ -1,4 +1,5 @@
-﻿using Domain.ValueObjects;
+﻿using CrossCuttingServices;
+using Domain.ValueObjects;
 using hosting.MiddleWares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -79,7 +80,7 @@ namespace hosting
 
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
 
             if (env.IsDevelopment())
@@ -111,6 +112,9 @@ namespace hosting
             });
 
             app.UseMvc();
+
+            var dbProvider = serviceProvider.GetService<IDbProvider>();
+            dbProvider.Context.Database.EnsureCreatedAsync();
 
         }
 

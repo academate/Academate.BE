@@ -1,5 +1,8 @@
-﻿using Domain.Entities;
+﻿using CrossCuttingServices;
+using Domain.DbContext;
+using Domain.Entities;
 using Domain.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -13,6 +16,7 @@ namespace Application.Services.AccessControl
 {
     public class AuthenticationService : IAuthenticationService
     {
+        private readonly AcademateDbContext _dbContext;
         private readonly AppSettings _appSettings;
 
         private IList<User> _users = new List<User>
@@ -20,14 +24,17 @@ namespace Application.Services.AccessControl
             new User { Id = 1, FirstName = "Test", LastName = "User", UserName = "admin", Password = "admin", Email = "admin@gmail.com"}
         };
 
-        public AuthenticationService(IOptions<AppSettings> appSettings)
+        public AuthenticationService(IOptions<AppSettings> appSettings, IDbProvider dbProvider)
         {
+            _dbContext = dbProvider.Context;
             _appSettings = appSettings.Value;
         }
 
         public User Authenticate(string userName, string password)
         {
-            var user = _users.SingleOrDefault(u => u.UserName == userName && u.Password == password)?.Clone() as User;
+            var user = _dbContext.Users
+                .AsNoTracking()
+                .SingleOrDefault(u => u.UserName == userName && u.Password == password);
             if (user == null)
                 return null;
 
@@ -48,7 +55,6 @@ namespace Application.Services.AccessControl
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(CustomClaimTypes.UserName, user.UserName),
                     new Claim(CustomClaimTypes.FirstName, user.FirstName),
-                    new Claim(CustomClaimTypes.LastName, user.LastName),
                     new Claim(CustomClaimTypes.Email, user.Email)
                 }),
                 Expires = DateTime.UtcNow.AddMinutes(10),
