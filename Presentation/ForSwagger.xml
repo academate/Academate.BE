@@ -4,6 +4,27 @@
         <name>Presentation</name>
     </assembly>
     <members>
+        <member name="M:Presentation.Controllers.ConfigurationsController.GetByKey(System.String)">
+            <summary>
+            Get configuration by key.
+            </summary>
+            <param name="key">Configuration key</param>
+            
+        </member>
+        <member name="M:Presentation.Controllers.ConfigurationsController.GetByGroup(System.String)">
+            <summary>
+            Get configurations by group.
+            </summary>
+            <param name="group">Configuration group</param>
+            
+        </member>
+        <member name="M:Presentation.Controllers.ConfigurationsController.Create(Presentation.ViewModels.ConfigurationViewModel)">
+            <summary>
+            Create new configuration.
+            </summary>
+            <param name="configuration">the new configuration</param>
+            
+        </member>
         <member name="M:Presentation.Controllers.UsersController.Authenticate(Presentation.ViewModels.CredentialViewModel)">
             <summary>
             Generate Authentication Token.
