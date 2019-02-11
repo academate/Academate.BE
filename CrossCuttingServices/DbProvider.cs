@@ -1,6 +1,5 @@
 ﻿using Domain.DbContext;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace CrossCuttingServices
 {
@@ -23,15 +22,10 @@ namespace CrossCuttingServices
             {
                 Context?.SaveChanges();
             }
-            catch (Exception)
+            finally
             {
-                // ignored
+                Context?.Dispose();
             }
         }
-    }
-
-    public interface IDbProvider : IDisposable
-    {
-        AcademateDbContext Context { get; }
     }
 }

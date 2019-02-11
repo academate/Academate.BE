@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -18,11 +17,6 @@ namespace Application.Services.AccessControl
     {
         private readonly AcademateDbContext _dbContext;
         private readonly AppSettings _appSettings;
-
-        private IList<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Test", LastName = "User", UserName = "admin", Password = "admin", Email = "admin@gmail.com"}
-        };
 
         public AuthenticationService(IOptions<AppSettings> appSettings, IDbProvider dbProvider)
         {
@@ -50,7 +44,7 @@ namespace Application.Services.AccessControl
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new Claim[]
+                Subject = new ClaimsIdentity(new[]
                 {
                     new Claim(ClaimTypes.Name, user.Id.ToString()),
                     new Claim(CustomClaimTypes.UserName, user.UserName),

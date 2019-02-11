@@ -1,19 +1,12 @@
 ﻿using CrossCuttingServices;
-using Domain.ValueObjects;
 using hosting.MiddleWares;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using Presentation.Controllers;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace hosting
 {
@@ -34,46 +27,10 @@ namespace hosting
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(presentationAssembly);
 
-            // Register the Swagger generator, defining 1 or more Swagger documents
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new Info
-                {
-                    Version = "v1",
-                    Title = "Restful API",
-                    Description = "An ASP.NET Core Web API For Academate",
-                    Contact = new Contact
-                    {
-                        Name = "Academate",
-                        Email = string.Empty,
-                        Url = "Academate.xyz"
-                    }
-                });
+            services.AddSwagger();
 
-                c.AddSecurityDefinition("Bearer", new ApiKeyScheme()
-                {
-                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>
-                {
-                    {"Bearer",new string[]{}}
-                });
+            services.AddJwtAuthentication(Configuration);
 
-
-                // Set the comments path for the Swagger JSON and UI.
-                var swaggerXmlPath = Path.Combine(AppContext.BaseDirectory, "ForSwagger.xml");
-                c.IncludeXmlComments(swaggerXmlPath);
-
-            });
-
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSettings>(appSettingsSection);
-
-            var appSettings = appSettingsSection.Get<AppSettings>();
-            InitJwt(services, appSettings.Secret);
             services.Inject();
 
         }
@@ -105,41 +62,17 @@ namespace hosting
 
             app.UseAuthentication();
 
-            app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
-            });
+            app.ConfigureSwagger();
 
             app.UseMvc();
 
+            EnsureDbCreation(serviceProvider);
+        }
+
+        private static void EnsureDbCreation(IServiceProvider serviceProvider)
+        {
             var dbProvider = serviceProvider.GetService<IDbProvider>();
             dbProvider.Context.Database.EnsureCreatedAsync();
-
         }
-
-        private static void InitJwt(IServiceCollection services, string secret)
-        {
-            var key = Encoding.ASCII.GetBytes(secret);
-            services.AddAuthentication(x =>
-                {
-                    x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                    x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                })
-                .AddJwtBearer(x =>
-                {
-                    x.RequireHttpsMetadata = true;
-                    x.SaveToken = true;
-                    x.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(key),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
-
-        }
-
     }
 }
