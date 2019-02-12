@@ -1,4 +1,5 @@
 ﻿using Application.Services.AccessControl;
+using CrossCuttingServices;
 using Microsoft.Extensions.DependencyInjection;
 using Repository.Configuration;
 
@@ -8,10 +9,11 @@ namespace hosting
     {
         public static void Inject(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddSingleton<IAuthenticationService, AuthenticationService>();
+            serviceCollection.AddScoped<IDbProvider, DbProvider>();
+            serviceCollection.AddScoped<IAuthenticationService, AuthenticationService>();
 
-            serviceCollection.AddSingleton<IConfigurationService, ConfigurationService>();
-            serviceCollection.AddSingleton<IConfigurationRepository, ConfigurationRepository>();
+            serviceCollection.AddScoped<IConfigurationService, ConfigurationService>();
+            serviceCollection.AddScoped<IConfigurationRepository, ConfigurationRepository>();
         }
     }
 }

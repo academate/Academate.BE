@@ -11,7 +11,7 @@ namespace hosting.MiddleWares
     public class ExceptionMiddleware
     {
         private readonly RequestDelegate _next;
-        private readonly Serilog.ILogger _logger;
+        private readonly ILogger _logger;
 
         public ExceptionMiddleware(RequestDelegate next)
         {
