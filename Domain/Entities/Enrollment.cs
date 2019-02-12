@@ -3,10 +3,8 @@ using System.Collections.Generic;
 
 namespace Domain.Entities
 {
-    public class Enrollment
+    public class Enrollment : Entity<int>
     {
-        public int Id { get; set; }
-
         public Course Course { get; set; }
 
         public int StudentId { get; set; }

@@ -1,9 +1,7 @@
 ﻿namespace Domain.Entities
 {
-    public class GradeComponent
+    public class GradeComponent : Entity<int>
     {
-        public int Id { get; set; }
-
         public Course Course { get; set; }
 
         public TaskType TaskType { get; set; }

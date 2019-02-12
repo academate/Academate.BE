@@ -2,10 +2,8 @@
 
 namespace Domain.Entities
 {
-    public class AcademicUnit
+    public class AcademicUnit : Entity<int>
     {
-        public int Id { get; set; }
-
         public Course Course { get; set; }
 
         public string Subject { get; set; }

@@ -2,10 +2,8 @@
 
 namespace Domain.Entities
 {
-    public class Course
+    public class Course : Entity<int>
     {
-        public int Id { get; set; }
-
         public string Title { get; set; }
 
         public Semester Semester { get; set; }
@@ -13,8 +11,6 @@ namespace Domain.Entities
         public int Points { get; set; }
 
         public string Description { get; set; }
-
-        public Room Room { get; set; }
 
         public IEnumerable<Enrollment> Enrollments { get; set; }
 
