@@ -2,10 +2,8 @@
 
 namespace Domain.Entities
 {
-    public class SubmittedTask
+    public class SubmittedTask : Entity<int>
     {
-        public int Id { get; set; }
-
         public Enrollment Enrollment { get; set; }
 
         public TaskType TaskType { get; set; }

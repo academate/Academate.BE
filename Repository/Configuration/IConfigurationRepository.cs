@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Repository.Configuration
 {
     public interface IConfigurationRepository
     {
-        Domain.ValueObjects.Configuration GetByKey(string key);
+        Task<Domain.ValueObjects.Configuration> GetByKey(string key);
 
-        IEnumerable<Domain.ValueObjects.Configuration> GetByGroup(string group);
-        void Add(Domain.ValueObjects.Configuration configuration);
+        Task<IEnumerable<Domain.ValueObjects.Configuration>> GetByGroup(string @group);
+
+        Task Add(Domain.ValueObjects.Configuration configuration);
     }
 }

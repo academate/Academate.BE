@@ -1,34 +1,45 @@
-﻿using Domain.Exception;
+﻿using CrossCuttingServices;
+using Domain.DbContext;
+using Domain.Exception;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Repository.Configuration
 {
     public class ConfigurationRepository : IConfigurationRepository
     {
-        public static List<Domain.ValueObjects.Configuration> _Configurations = new List<Domain.ValueObjects.Configuration>();
+        private readonly AcademateDbContext _dbContext;
 
-        public Domain.ValueObjects.Configuration GetByKey(string key)
+        public ConfigurationRepository(IDbProvider dbProvider)
         {
-            var configuration = _Configurations.FirstOrDefault(c => c.Key == key);
+            _dbContext = dbProvider.Context;
+        }
+
+        public async Task<Domain.ValueObjects.Configuration> GetByKey(string key)
+        {
+            var configuration = await _dbContext.Configurations
+                                                .FirstOrDefaultAsync(c => c.Key == key);
             return configuration;
         }
 
-        public IEnumerable<Domain.ValueObjects.Configuration> GetByGroup(string group)
+        public async Task<IEnumerable<Domain.ValueObjects.Configuration>> GetByGroup(string @group)
         {
-            var configurations = _Configurations.Where(c => c.Group == group);
+            var configurations = await _dbContext.Configurations
+                                            .Where(c => c.Group == group)
+                                            .ToArrayAsync();
             return configurations;
         }
 
-        public void Add(Domain.ValueObjects.Configuration configuration)
+        public async Task Add(Domain.ValueObjects.Configuration configuration)
         {
-            var isKeyUsed = _Configurations.Any(c => c.Key == configuration.Key);
+            var isKeyUsed = await _dbContext.Configurations.AnyAsync(c => c.Key == configuration.Key);
 
             if (isKeyUsed)
                 throw new DuplicationKey("Key already used!");
 
-            _Configurations.Add(configuration);
-
+            await _dbContext.Configurations.AddAsync(configuration);
         }
     }
 }

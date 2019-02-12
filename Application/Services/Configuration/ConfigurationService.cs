@@ -3,6 +3,7 @@ using Domain.ValueObjects;
 using Repository.Configuration;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Application.Services.AccessControl
 {
@@ -15,12 +16,12 @@ namespace Application.Services.AccessControl
             _configurationRepository = configurationRepository;
         }
 
-        public ConfigurationDto GetByKey(string key)
+        public async Task<ConfigurationDto> GetByKey(string key)
         {
             if (string.IsNullOrEmpty(key))
                 return null;
 
-            var configuration = _configurationRepository.GetByKey(key);
+            var configuration = await _configurationRepository.GetByKey(key);
             var configurationDto = Map(configuration);
 
             return configurationDto;
@@ -40,12 +41,12 @@ namespace Application.Services.AccessControl
             };
         }
 
-        public IEnumerable<ConfigurationDto> GetByGroup(string group)
+        public async Task<IEnumerable<ConfigurationDto>> GetByGroup(string @group)
         {
             if (string.IsNullOrEmpty(group))
                 return null;
 
-            var configurations = _configurationRepository.GetByGroup(group);
+            var configurations = await _configurationRepository.GetByGroup(@group);
             var configurationDtos = Map(configurations);
 
             return configurationDtos;
@@ -57,7 +58,7 @@ namespace Application.Services.AccessControl
         }
 
 
-        public void Create(ConfigurationDto configurationDto)
+        public async Task Create(ConfigurationDto configurationDto)
         {
             if (configurationDto == null)
                 return;
@@ -65,7 +66,7 @@ namespace Application.Services.AccessControl
 
             var configuration = Map(configurationDto);
 
-            _configurationRepository.Add(configuration);
+            await _configurationRepository.Add(configuration);
         }
 
         // TODO change with auto mapper

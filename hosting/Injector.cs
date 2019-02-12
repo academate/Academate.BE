@@ -1,7 +1,9 @@
 ﻿using Application.Services.AccessControl;
+using Application.Services.Exam;
 using CrossCuttingServices;
 using Microsoft.Extensions.DependencyInjection;
 using Repository.Configuration;
+using Repository.Enrollment;
 
 namespace hosting
 {
@@ -14,6 +16,10 @@ namespace hosting
 
             serviceCollection.AddScoped<IConfigurationService, ConfigurationService>();
             serviceCollection.AddScoped<IConfigurationRepository, ConfigurationRepository>();
+
+            serviceCollection.AddScoped<IExamService, ExamService>();
+            serviceCollection.AddScoped<IEnrollmentRepository, ExamRepository>();
+            serviceCollection.AddScoped<IEnrollmentRepository, ExamRepository>();
         }
     }
 }

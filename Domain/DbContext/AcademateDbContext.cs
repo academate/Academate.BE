@@ -97,7 +97,8 @@ namespace Domain.DbContext
 
             modelBuilder.Entity<Course>()
                 .HasMany(c => c.Enrollments)
-                .WithOne(e => e.Course);
+                .WithOne(e => e.Course)
+                .HasForeignKey(e => e.CourseId);
 
             modelBuilder.Entity<Course>().HasOne(c => c.Lecturer);
 
