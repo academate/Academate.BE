@@ -5,7 +5,7 @@ namespace Domain.Entities
     // To be used as base abstract class for domain entities
     public abstract class Entity<TId> : IEquatable<Entity<TId>>
     {
-        public virtual TId Id { get; protected set; }
+        public virtual TId Id { get; set; }
 
         protected Entity(TId id)
         {
