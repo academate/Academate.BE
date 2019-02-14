@@ -2,7 +2,7 @@
 
 namespace Presentation.ViewModels
 {
-    public class ExamViewModel
+    public class EnrolledExamViewModel
     {
         public int Id { get; set; }
 

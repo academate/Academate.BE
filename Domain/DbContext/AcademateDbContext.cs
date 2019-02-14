@@ -176,7 +176,7 @@ namespace Domain.DbContext
         {
             modelBuilder.Entity<AcademicUnit>().HasKey(a => a.Id);
             modelBuilder.Entity<AcademicUnit>().
-                Property(a => a.Subject)
+                Property(a => a.Title)
                 .HasMaxLength(250);
 
             modelBuilder.Entity<AcademicUnit>()

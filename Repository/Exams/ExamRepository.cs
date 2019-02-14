@@ -17,7 +17,7 @@ namespace Repository.Exams
             _dbContext = dbProvider.Context;
         }
 
-        public async Task<IEnumerable<Exam>> GetExamsOfCourses(IEnumerable<int> courseIds)
+        public async Task<IEnumerable<Exam>> GetExamsByCourseIds(IEnumerable<int> courseIds)
         {
             if (courseIds == null || !courseIds.Any())
                 return Enumerable.Empty<Exam>();

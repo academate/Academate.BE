@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 
-namespace Domain.Entities
+namespace Application.Dtos
 {
-    public class AcademicUnit : Entity<int>
+    public class AcademicUnitDto
     {
-        public Course Course { get; set; }
+        public int CourseId { get; set; }
 
         public string Title { get; set; }
 
