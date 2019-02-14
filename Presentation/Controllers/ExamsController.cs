@@ -1,9 +1,12 @@
 ﻿using Application.Dtos;
 using Application.Services.Exam;
+using Domain.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
+using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
@@ -12,17 +15,17 @@ namespace Presentation.Controllers
     [ApiController]
     public class ExamsController : ControllerBase
     {
-        private readonly ExamService _examService;
+        private readonly IExamService _examService;
 
-        public ExamsController(ExamService examService)
+        public ExamsController(IExamService examService)
         {
             _examService = examService;
         }
 
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
-            var examDtos = _examService.GetExamsOfLoggedInUser();
+            var examDtos = await _examService.GetExamsOfLoggedInUser();
             var examViewModels = examDtos.Select(Map);
 
             return Ok(examViewModels);
@@ -30,7 +33,14 @@ namespace Presentation.Controllers
 
         private ExamViewModel Map(ExamDto examDto)
         {
-            return new ExamViewModel();
+            return new ExamViewModel
+            {
+                Id = examDto.Id,
+                Title = examDto.Title,
+                StartDate = examDto.DateTime,
+                Duration = examDto.Duration,
+                Type = Enum.GetName(typeof(ExamType), examDto.Type)
+            };
         }
     }
 }

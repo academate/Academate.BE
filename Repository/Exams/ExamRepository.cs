@@ -17,14 +17,16 @@ namespace Repository.Exams
             _dbContext = dbProvider.Context;
         }
 
-        public async Task<IEnumerable<Exam>> GetExamsByIds(IEnumerable<int> ids)
+        public async Task<IEnumerable<Exam>> GetExamsOfCourses(IEnumerable<int> courseIds)
         {
-            if (ids == null || !ids.Any())
+            if (courseIds == null || !courseIds.Any())
                 return Enumerable.Empty<Exam>();
 
-            var exams = await _dbContext.Exams.Where(c => ids.Contains(c.Id)).ToArrayAsync();
+            var exams = await _dbContext.Exams
+                .Where(e => courseIds.Contains(e.CourseId))
+                .ToArrayAsync();
+
             return exams;
         }
-
     }
 }

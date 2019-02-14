@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Presentation.ViewModels;
+using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
@@ -29,9 +30,9 @@ namespace Presentation.Controllers
         /// 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody]CredentialViewModel credential)
+        public async Task<IActionResult> Authenticate([FromBody]CredentialViewModel credential)
         {
-            var user = _authenticationService.Authenticate(credential.UserName, credential.Password);
+            var user = await _authenticationService.Authenticate(credential.UserName, credential.Password);
 
             if (user == null)
                 return BadRequest(new { message = "Username or password is incorrect!" });

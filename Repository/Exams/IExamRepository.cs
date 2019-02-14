@@ -6,6 +6,6 @@ namespace Repository.Exams
 {
     public interface IExamRepository
     {
-        Task<IEnumerable<Exam>> GetExamsByIds(IEnumerable<int> ids);
+        Task<IEnumerable<Exam>> GetExamsOfCourses(IEnumerable<int> courseIds);
     }
 }

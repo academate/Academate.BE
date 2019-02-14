@@ -5,6 +5,7 @@ namespace Domain.Entities
 {
     public class Exam : Entity<int>
     {
+        public int CourseId { get; set; }
         public Course Course { get; set; }
 
         public string Title { get; set; }

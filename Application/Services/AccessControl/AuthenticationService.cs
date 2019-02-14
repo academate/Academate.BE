@@ -7,9 +7,9 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Services.AccessControl
 {
@@ -24,11 +24,11 @@ namespace Application.Services.AccessControl
             _appSettings = appSettings.Value;
         }
 
-        public User Authenticate(string userName, string password)
+        public async Task<User> Authenticate(string userName, string password)
         {
-            var user = _dbContext.Users
+            var user = await _dbContext.Users
                 .AsNoTracking()
-                .SingleOrDefault(u => u.UserName == userName && u.Password == password);
+                .SingleOrDefaultAsync(u => u.UserName == userName && u.Password == password);
             if (user == null)
                 return null;
 
