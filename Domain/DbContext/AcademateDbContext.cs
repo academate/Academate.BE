@@ -78,20 +78,40 @@ namespace Domain.DbContext
                 Type = ExamType.TermA
             };
             modelBuilder.Entity<Exam>().HasData(exam1, exam2, exam3);
-            modelBuilder.Entity<Course>().HasData(
-                new Course
+
+            modelBuilder.Entity<AcademicUnit>().HasData(
+                new AcademicUnit
                 {
                     Id = 1,
-                    Title = "Arabic",
-                    Points = 3,
-                    //Exams = new[] { exam1, exam2 }
+                    CourseId = 1,
+                    Title = "Arabic Lecture",
+                    Active = true,
+                    DateTime = new DateTime(2019, 2, 20, 12, 30, 0),
+                    Duration = 90
                 },
-                new Course
+                new AcademicUnit
                 {
                     Id = 2,
-                    Title = "Hebrew",
-                    //Exams = new[] { exam3 }
+                    CourseId = 1,
+                    Title = "Arabic Grammar",
+                    Active = true,
+                    DateTime = new DateTime(2019, 2, 21, 14, 30, 0),
+                    Duration = 90
+                },
+                new AcademicUnit
+                {
+                    Id = 3,
+                    CourseId = 2,
+                    Title = "Hebrew Lecture",
+                    Active = true,
+                    DateTime = new DateTime(2019, 2, 20, 8, 0, 0),
+                    Duration = 120
                 }
+            );
+
+            modelBuilder.Entity<Course>().HasData(
+                new Course { Id = 1, Title = "Arabic", Points = 3 },
+                new Course { Id = 2, Title = "Hebrew", Points = 2 }
             );
 
 
@@ -169,7 +189,8 @@ namespace Domain.DbContext
 
             modelBuilder.Entity<Course>()
                 .HasMany(c => c.AcademicUnits)
-                .WithOne(a => a.Course);
+                .WithOne(a => a.Course)
+                .HasForeignKey(a => a.CourseId);
         }
 
         private static void OnAcademicUnitCreating(ModelBuilder modelBuilder)

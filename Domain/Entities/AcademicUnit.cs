@@ -4,6 +4,7 @@ namespace Domain.Entities
 {
     public class AcademicUnit : Entity<int>
     {
+        public int CourseId { get; set; }
         public Course Course { get; set; }
 
         public string Title { get; set; }
