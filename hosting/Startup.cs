@@ -30,7 +30,7 @@ namespace hosting
             services.AddSwagger();
 
             services.AddJwtAuthentication(Configuration);
-
+            services.AddHttpContextAccessor();
             services.Inject();
 
         }

@@ -1,12 +1,11 @@
 ﻿using Domain.Enums;
 using System;
 
-namespace Domain.Entities
+namespace Application.Dtos
 {
-    public class Exam : Entity<int>
+    public class ExamDto
     {
-        public int CourseId { get; set; }
-        public Course Course { get; set; }
+        public int Id { get; set; }
 
         public string Title { get; set; }
 

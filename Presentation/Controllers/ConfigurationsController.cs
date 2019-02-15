@@ -5,12 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Presentation.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class ConfigurationsController : ControllerBase
     {
         private readonly IConfigurationService _configurationService;
@@ -26,12 +27,12 @@ namespace Presentation.Controllers
         /// <param name="key">Configuration key</param>
         /// 
         [HttpGet("{key}")]
-        public IActionResult GetByKey(string key)
+        public async Task<IActionResult> GetByKey(string key)
         {
             if (string.IsNullOrEmpty(key))
                 return BadRequest($"Invalid {nameof(key)}");
 
-            var configurationDto = _configurationService.GetByKey(key);
+            var configurationDto = await _configurationService.GetByKey(key);
             var configurationViewModel = Map(configurationDto);
 
             return Ok(configurationViewModel);
@@ -56,12 +57,12 @@ namespace Presentation.Controllers
         /// <param name="group">Configuration group</param>
         /// 
         [HttpGet("groups/{group}")]
-        public IActionResult GetByGroup(string group)
+        public async Task<IActionResult> GetByGroup(string group)
         {
             if (string.IsNullOrEmpty(group))
                 return BadRequest($"Invalid {nameof(group)}");
 
-            var configurationDtos = _configurationService.GetByGroup(group);
+            var configurationDtos = await _configurationService.GetByGroup(@group);
             var configurationViewModels = Map(configurationDtos);
 
             return Ok(configurationViewModels);
@@ -78,10 +79,10 @@ namespace Presentation.Controllers
         /// <param name="configuration">the new configuration</param>
         /// 
         [HttpPost("")]
-        public IActionResult Create([FromBody]ConfigurationViewModel configuration)
+        public async Task<IActionResult> Create([FromBody]ConfigurationViewModel configuration)
         {
             var configurationDto = Map(configuration);
-            _configurationService.Create(configurationDto);
+            await _configurationService.Create(configurationDto);
 
 
             return Created("", null);

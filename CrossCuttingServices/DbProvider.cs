@@ -11,6 +11,8 @@ namespace CrossCuttingServices
         {
             var builder = new DbContextOptionsBuilder<AcademateDbContext>();
             builder.UseInMemoryDatabase("AcademateDb");
+            builder.EnableSensitiveDataLogging();
+
             var options = builder.Options;
 
             Context = new AcademateDbContext(options);

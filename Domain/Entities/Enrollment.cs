@@ -5,6 +5,7 @@ namespace Domain.Entities
 {
     public class Enrollment : Entity<int>
     {
+        public int CourseId { get; set; }
         public Course Course { get; set; }
 
         public int StudentId { get; set; }

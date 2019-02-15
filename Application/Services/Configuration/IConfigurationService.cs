@@ -1,13 +1,14 @@
 ﻿using Application.Dtos;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Application.Services.AccessControl
 {
     public interface IConfigurationService
     {
-        ConfigurationDto GetByKey(string key);
+        Task<ConfigurationDto> GetByKey(string key);
 
-        IEnumerable<ConfigurationDto> GetByGroup(string group);
-        void Create(ConfigurationDto configurationDto);
+        Task<IEnumerable<ConfigurationDto>> GetByGroup(string @group);
+        Task Create(ConfigurationDto configurationDto);
     }
 }

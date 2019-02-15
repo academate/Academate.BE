@@ -1,9 +1,10 @@
-﻿using Domain.Entities;
+﻿using System.Threading.Tasks;
+using Domain.Entities;
 
 namespace Application.Services.AccessControl
 {
     public interface IAuthenticationService
     {
-        User Authenticate(string username, string password);
+        Task<User> Authenticate(string username, string password);
     }
 }
