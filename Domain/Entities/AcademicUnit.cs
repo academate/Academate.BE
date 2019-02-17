@@ -17,6 +17,8 @@ namespace Domain.Entities
 
         public Person Lecturer { get; set; }
 
+        public bool Repeatable { get; set; }
+
         public string Comment { get; set; }
     }
 }

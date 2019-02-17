@@ -87,7 +87,8 @@ namespace Domain.DbContext
                     Title = "Arabic Lecture",
                     Active = true,
                     DateTime = new DateTime(2019, 2, 20, 12, 30, 0),
-                    Duration = 90
+                    Duration = 90,
+                    Repeatable = true
                 },
                 new AcademicUnit
                 {
@@ -96,7 +97,8 @@ namespace Domain.DbContext
                     Title = "Arabic Grammar",
                     Active = true,
                     DateTime = new DateTime(2019, 2, 21, 14, 30, 0),
-                    Duration = 90
+                    Duration = 90,
+                    Repeatable = true
                 },
                 new AcademicUnit
                 {
@@ -105,15 +107,22 @@ namespace Domain.DbContext
                     Title = "Hebrew Lecture",
                     Active = true,
                     DateTime = new DateTime(2019, 2, 20, 8, 0, 0),
-                    Duration = 120
+                    Duration = 120,
+                    Repeatable = true
                 }
             );
 
             modelBuilder.Entity<Course>().HasData(
-                new Course { Id = 1, Title = "Arabic", Points = 3 },
-                new Course { Id = 2, Title = "Hebrew", Points = 2 }
+                new Course { Id = 1, Title = "Arabic", Points = 3, SemesterId = 1 },
+                new Course { Id = 2, Title = "Hebrew", Points = 2, SemesterId = 1 }
             );
 
+            modelBuilder.Entity<Semester>().HasData(
+                new Semester
+                {
+                    Id = 1, StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddMonths(3), Description = "Semester A"
+                });
 
             modelBuilder.Entity<Enrollment>().HasData(
                 new Enrollment { Id = 1, StudentId = 1, CourseId = 1, Status = EnrollmentStatus.Active },
@@ -142,7 +151,8 @@ namespace Domain.DbContext
             modelBuilder.Entity<Semester>().HasKey(s => s.Id);
             modelBuilder.Entity<Semester>()
                 .HasMany(s => s.Courses)
-                .WithOne(c => c.Semester);
+                .WithOne(c => c.Semester)
+                .HasForeignKey(c => c.SemesterId);
 
         }
 

@@ -1,4 +1,5 @@
 ﻿using Application.Services.AccessControl;
+using Application.Services.Course;
 using Application.Services.Enrollment;
 using Application.Services.Exam;
 using CrossCuttingServices;
@@ -24,6 +25,7 @@ namespace hosting
             serviceCollection.AddScoped<IExamRepository, ExamRepository>();
             serviceCollection.AddScoped<IEnrollmentService, EnrollmentService>();
             serviceCollection.AddScoped<IEnrollmentRepository, EnrollmentRepository>();
+            serviceCollection.AddScoped<ICourseService, CourseService>();
             serviceCollection.AddScoped<ICourseRepository, CourseRepository>();
 
         }

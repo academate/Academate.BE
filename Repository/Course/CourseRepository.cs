@@ -23,18 +23,24 @@ namespace Repository.Course
             if (courseIds == null || !courseIds.Any())
                 return Enumerable.Empty<AcademicUnit>();
 
-
-
-            if (!includeNotActive)
-            {
-                return await _dbContext.AcademicUnits
-                    .Where(a => courseIds.Contains(a.CourseId) && a.Active == true)
-                    .ToArrayAsync();
-            }
-
-            return await _dbContext.AcademicUnits
+            var academicUnits = await _dbContext.AcademicUnits
                 .Where(a => courseIds.Contains(a.CourseId))
                 .ToArrayAsync();
+
+            return includeNotActive ? academicUnits : academicUnits.Where(a => a.Active);
+        }
+
+        public async Task<IEnumerable<Domain.Entities.Course>> GetByIds(IEnumerable<int> courseIds)
+        {
+            if (courseIds == null || !courseIds.Any())
+                return Enumerable.Empty<Domain.Entities.Course>();
+
+            var course = await _dbContext.Courses
+                .Where(c => courseIds.Contains(c.Id))
+                .Include(c => c.Semester)
+                .ToArrayAsync();
+
+            return course;
         }
     }
 }

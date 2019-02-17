@@ -46,9 +46,18 @@ namespace Application.Services.Enrollment
             var enrolledCourses = (await _enrollmentRepository.GetEnrollmentsOfUser(userId))
                 .Select(e => e.CourseId);
 
-            var academicUnits = (await _courseRepository.GetAcademicUnitsByCourseIds(enrolledCourses));
+            var courses = (await _courseRepository.GetByIds(enrolledCourses)).ToDictionary(c => c.Id);
 
-            var academicUnitsDto = academicUnits.Select(Map);
+            var academicUnitsDto = (await _courseRepository.GetAcademicUnitsByCourseIds(enrolledCourses))
+                .Select(Map).ToArray();
+
+            foreach (var academicUnitDto in academicUnitsDto)
+            {
+                var semester = courses[academicUnitDto.CourseId].Semester;
+                academicUnitDto.SemesterId = semester.Id;
+                academicUnitDto.DueTo = semester.EndDate;
+            }
+
             return academicUnitsDto;
         }
 
@@ -73,6 +82,7 @@ namespace Application.Services.Enrollment
                 DateTime = academicUnit.DateTime,
                 Duration = academicUnit.Duration,
                 Lecturer = academicUnit.Lecturer,
+                Repeatable = academicUnit.Repeatable,
                 Comment = academicUnit.Comment
             };
         }

@@ -17,6 +17,12 @@ namespace Application.Dtos
 
         public Person Lecturer { get; set; }
 
+        public bool Repeatable { get; set; }
+
+        public int SemesterId { get; set; }
+
+        public DateTime DueTo { get; set; }
+
         public string Comment { get; set; }
     }
 }

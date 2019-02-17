@@ -6,6 +6,7 @@ namespace Domain.Entities
     {
         public string Title { get; set; }
 
+        public int SemesterId { get; set; }
         public Semester Semester { get; set; }
 
         public int Points { get; set; }

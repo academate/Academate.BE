@@ -52,15 +52,19 @@ namespace Presentation.Controllers
             };
         }
 
-        private AcademicUnitsViewModels Map(AcademicUnitDto academicUnitDto)
+        private AcademicUnitViewModel Map(AcademicUnitDto academicUnitDto)
         {
-            return new AcademicUnitsViewModels
+            return new AcademicUnitViewModel
             {
                 Title = academicUnitDto.Title,
+                CourseId = academicUnitDto.CourseId,
                 Lecturer = academicUnitDto.Lecturer?.FullName,
                 DateTime = academicUnitDto.DateTime,
                 Duration = academicUnitDto.Duration,
-                Comment = academicUnitDto.Comment
+                Repeatable = academicUnitDto.Repeatable,
+                DueTo = academicUnitDto.DueTo,
+                SemesterId = academicUnitDto.SemesterId,
+                Comment = academicUnitDto.Comment,
             };
         }
     }
