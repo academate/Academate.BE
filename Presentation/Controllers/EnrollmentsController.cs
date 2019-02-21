@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Services.Enrollment;
+﻿using Application.Services.Enrollment;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,25 +36,9 @@ namespace Presentation.Controllers
         public async Task<IActionResult> GetEnrolledAcademicUnits()
         {
             var academicUnitsDto = await _enrollmentService.GetEnrolledAcademicUnits();
-            var academicUnitsDtoViewModels = academicUnitsDto.Select(Map);
+            var academicUnitsDtoViewModels = academicUnitsDto.Select(_mapper.Map<AcademicUnitViewModel>);
 
             return Ok(academicUnitsDtoViewModels);
-        }
-
-        private AcademicUnitViewModel Map(AcademicUnitDto academicUnitDto)
-        {
-            return new AcademicUnitViewModel
-            {
-                Title = academicUnitDto.Title,
-                CourseId = academicUnitDto.CourseId,
-                Lecturer = academicUnitDto.Lecturer?.FullName,
-                DateTime = academicUnitDto.DateTime,
-                Duration = academicUnitDto.Duration,
-                Repeatable = academicUnitDto.Repeatable,
-                DueTo = academicUnitDto.DueTo,
-                SemesterId = academicUnitDto.SemesterId,
-                Comment = academicUnitDto.Comment,
-            };
         }
     }
 }

@@ -53,7 +53,7 @@ namespace Application.Services.Enrollment
             var courses = (await _courseRepository.GetByIds(enrolledCourses)).ToDictionary(c => c.Id);
 
             var academicUnitsDto = (await _courseRepository.GetAcademicUnitsByCourseIds(enrolledCourses))
-                .Select(Map).ToArray();
+                .Select(_mapper.Map<AcademicUnitDto>).ToArray();
 
             foreach (var academicUnitDto in academicUnitsDto)
             {
@@ -63,20 +63,6 @@ namespace Application.Services.Enrollment
             }
 
             return academicUnitsDto;
-        }
-
-        private AcademicUnitDto Map(Domain.Entities.AcademicUnit academicUnit)
-        {
-            return new AcademicUnitDto
-            {
-                CourseId = academicUnit.CourseId,
-                Title = academicUnit.Title,
-                DateTime = academicUnit.DateTime,
-                Duration = academicUnit.Duration,
-                Lecturer = academicUnit.Lecturer,
-                Repeatable = academicUnit.Repeatable,
-                Comment = academicUnit.Comment
-            };
         }
     }
 }
