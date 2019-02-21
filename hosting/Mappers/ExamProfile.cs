@@ -2,7 +2,7 @@
 using AutoMapper;
 using Presentation.ViewModels;
 
-namespace hosting.Mappers.Configurations
+namespace hosting.Mappers
 {
     // ReSharper disable once UnusedMember.Global
     public class ExamProfile : Profile

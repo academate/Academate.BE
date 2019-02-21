@@ -1,8 +1,8 @@
 ﻿using Application.Dtos;
+using Application.Services.Course;
 using AutoMapper;
 using Cx.AccessControl.Application.Extensions;
 using Microsoft.AspNetCore.Http;
-using Repository.Course;
 using Repository.Enrollment;
 using Repository.Exams;
 using System.Collections.Generic;
@@ -15,19 +15,19 @@ namespace Application.Services.Enrollment
     {
         private readonly IEnrollmentRepository _enrollmentRepository;
         private readonly IExamRepository _examRepository;
-        private readonly ICourseRepository _courseRepository;
+        private readonly ICourseService _courseService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
         public EnrollmentService(IEnrollmentRepository enrollmentRepository,
             IExamRepository examRepository,
-            ICourseRepository courseRepository,
+            ICourseService courseService,
             IHttpContextAccessor httpContextAccessor,
             IMapper mapper)
         {
             _enrollmentRepository = enrollmentRepository;
             _examRepository = examRepository;
-            _courseRepository = courseRepository;
+            _courseService = courseService;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
         }
@@ -50,9 +50,9 @@ namespace Application.Services.Enrollment
             var enrolledCourses = (await _enrollmentRepository.GetEnrollmentsOfUser(userId))
                 .Select(e => e.CourseId).ToArray();
 
-            var courses = (await _courseRepository.GetByIds(enrolledCourses)).ToDictionary(c => c.Id);
+            var courses = (await _courseService.GetCoursesByIds(enrolledCourses)).ToDictionary(c => c.Id);
 
-            var academicUnitsDto = (await _courseRepository.GetAcademicUnitsByCourseIds(enrolledCourses))
+            var academicUnitsDto = (await _courseService.GetAcademicUnitsByCourseIds(enrolledCourses))
                 .Select(_mapper.Map<AcademicUnitDto>).ToArray();
 
             foreach (var academicUnitDto in academicUnitsDto)

@@ -3,7 +3,7 @@ using AutoMapper;
 using Domain.ValueObjects;
 using Presentation.ViewModels;
 
-namespace hosting.Mappers.Configurations
+namespace hosting.Mappers
 {
     // ReSharper disable once UnusedMember.Global
     public class ConfigurationProfile : Profile

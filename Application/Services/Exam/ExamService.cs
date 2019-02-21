@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Repository.Exams;
+﻿using Repository.Exams;
 
 namespace Application.Services.Exam
 {
@@ -10,18 +9,6 @@ namespace Application.Services.Exam
         public ExamService(IExamRepository examRepository)
         {
             _examRepository = examRepository;
-        }
-
-        private ExamDto Map(Domain.Entities.Exam exam)
-        {
-            return new ExamDto
-            {
-                Id = exam.Id,
-                Title = exam.Title,
-                DateTime = exam.DateTime,
-                Duration = exam.Duration,
-                Type = exam.Type
-            };
         }
     }
 }
