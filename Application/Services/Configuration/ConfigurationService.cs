@@ -1,19 +1,23 @@
 ﻿using Application.Dtos;
-using Domain.ValueObjects;
+using Application.Services.AccessControl;
+using AutoMapper;
 using Repository.Configuration;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Services.AccessControl
+namespace Application.Services.Configuration
 {
     public class ConfigurationService : IConfigurationService
     {
         private readonly IConfigurationRepository _configurationRepository;
+        private readonly IMapper _mapper;
 
-        public ConfigurationService(IConfigurationRepository configurationRepository)
+        public ConfigurationService(IConfigurationRepository configurationRepository,
+            IMapper mapper)
         {
             _configurationRepository = configurationRepository;
+            _mapper = mapper;
         }
 
         public async Task<ConfigurationDto> GetByKey(string key)
@@ -22,23 +26,9 @@ namespace Application.Services.AccessControl
                 return null;
 
             var configuration = await _configurationRepository.GetByKey(key);
-            var configurationDto = Map(configuration);
+            var configurationDto = _mapper.Map<ConfigurationDto>(configuration);
 
             return configurationDto;
-        }
-
-        // TODO change with auto mapper
-        private ConfigurationDto Map(Configuration configuration)
-        {
-            if (configuration == null)
-                return null;
-
-            return new ConfigurationDto
-            {
-                Key = configuration.Key,
-                Group = configuration.Group,
-                Value = configuration.Value
-            };
         }
 
         public async Task<IEnumerable<ConfigurationDto>> GetByGroup(string @group)
@@ -47,14 +37,9 @@ namespace Application.Services.AccessControl
                 return null;
 
             var configurations = await _configurationRepository.GetByGroup(@group);
-            var configurationDtos = Map(configurations);
+            var configurationDtos = configurations.Select(_mapper.Map<ConfigurationDto>);
 
             return configurationDtos;
-        }
-        // TODO change with auto mapper
-        private IEnumerable<ConfigurationDto> Map(IEnumerable<Configuration> configurations)
-        {
-            return configurations.Select(Map);
         }
 
 
@@ -63,24 +48,9 @@ namespace Application.Services.AccessControl
             if (configurationDto == null)
                 return;
 
-
-            var configuration = Map(configurationDto);
+            var configuration = _mapper.Map<Domain.ValueObjects.Configuration>(configurationDto);
 
             await _configurationRepository.Add(configuration);
-        }
-
-        // TODO change with auto mapper
-        private Configuration Map(ConfigurationDto configurationDto)
-        {
-            if (configurationDto == null)
-                return null;
-
-            return new Configuration
-            {
-                Key = configurationDto.Key,
-                Group = configurationDto.Group,
-                Value = configurationDto.Value
-            };
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using Application.Dtos;
 using Application.Services.AccessControl;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.ViewModels;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,10 +15,13 @@ namespace Presentation.Controllers
     public class ConfigurationsController : ControllerBase
     {
         private readonly IConfigurationService _configurationService;
+        private readonly IMapper _mapper;
 
-        public ConfigurationsController(IConfigurationService configurationService)
+        public ConfigurationsController(IConfigurationService configurationService,
+            IMapper mapper)
         {
             _configurationService = configurationService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -33,22 +36,9 @@ namespace Presentation.Controllers
                 return BadRequest($"Invalid {nameof(key)}");
 
             var configurationDto = await _configurationService.GetByKey(key);
-            var configurationViewModel = Map(configurationDto);
+            var configurationViewModel = _mapper.Map<ConfigurationViewModel>(configurationDto);
 
             return Ok(configurationViewModel);
-        }
-
-        private ConfigurationViewModel Map(ConfigurationDto configurationDto)
-        {
-            if (configurationDto == null)
-                return null;
-
-            return new ConfigurationViewModel
-            {
-                Key = configurationDto.Key,
-                Group = configurationDto.Group,
-                Value = configurationDto.Value
-            };
         }
 
         /// <summary>
@@ -63,14 +53,9 @@ namespace Presentation.Controllers
                 return BadRequest($"Invalid {nameof(group)}");
 
             var configurationDtos = await _configurationService.GetByGroup(@group);
-            var configurationViewModels = Map(configurationDtos);
+            var configurationViewModels = configurationDtos.Select(_mapper.Map<ConfigurationViewModel>); ;
 
             return Ok(configurationViewModels);
-        }
-
-        private IEnumerable<ConfigurationViewModel> Map(IEnumerable<ConfigurationDto> configurationDtos)
-        {
-            return configurationDtos.Select(Map);
         }
 
         /// <summary>
@@ -81,25 +66,12 @@ namespace Presentation.Controllers
         [HttpPost("")]
         public async Task<IActionResult> Create([FromBody]ConfigurationViewModel configuration)
         {
-            var configurationDto = Map(configuration);
+            var configurationDto = _mapper.Map<ConfigurationDto>(configuration);
             await _configurationService.Create(configurationDto);
 
 
             return Created("", null);
             //return CreatedAtAction(nameof(GetByKey), new { id = configuration.Key }, configuration);
-        }
-
-        private ConfigurationDto Map(ConfigurationViewModel configurationViewModel)
-        {
-            if (configurationViewModel == null)
-                return null;
-
-            return new ConfigurationDto
-            {
-                Key = configurationViewModel.Key,
-                Group = configurationViewModel.Group,
-                Value = configurationViewModel.Value
-            };
         }
     }
 }
