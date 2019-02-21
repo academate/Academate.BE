@@ -1,5 +1,5 @@
 ﻿using Application.Dtos;
-using Domain.Entities;
+using AutoMapper;
 using Repository.Course;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,41 +10,29 @@ namespace Application.Services.Course
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository _courseRepository;
+        private readonly IMapper _mapper;
 
-        public CourseService(ICourseRepository courseRepository)
+        public CourseService(ICourseRepository courseRepository,
+            IMapper mapper)
         {
             _courseRepository = courseRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<CourseDto>> GetCoursesByIds(IEnumerable<int> ids)
         {
             var courses = await _courseRepository.GetByIds(ids);
-            var coursesDto = courses.Select(Map);
+            var coursesDto = courses.Select(_mapper.Map<CourseDto>);
 
             return coursesDto;
         }
 
-        private CourseDto Map(Domain.Entities.Course course)
+        public async Task<IEnumerable<AcademicUnitDto>> GetAcademicUnitsByCourseIds(IEnumerable<int> ids)
         {
-            return new CourseDto
-            {
-                Id = course.Id,
-                Title = course.Title,
-                Points = course.Points,
-                Description = course.Description,
-                Semester = Map(course.Semester)
-            };
-        }
+            var academicUnits = await _courseRepository.GetAcademicUnitsByCourseIds(ids);
+            var academicUnitsDto = academicUnits.Select(_mapper.Map<AcademicUnitDto>);
 
-        private SemesterDto Map(Semester semester)
-        {
-            return new SemesterDto
-            {
-                Id = semester.Id,
-                Description = semester.Description,
-                StartDate = semester.StartDate,
-                EndDate = semester.EndDate
-            };
+            return academicUnitsDto;
         }
     }
 }

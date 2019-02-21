@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Presentation.Controllers;
 using System;
+using AutoMapper;
 
 namespace hosting
 {
@@ -26,6 +27,8 @@ namespace hosting
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(presentationAssembly);
+
+            services.AddAutoMapper();
 
             services.AddSwagger();
 
