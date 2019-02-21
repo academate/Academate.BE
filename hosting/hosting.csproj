@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\CrossCuttingServices\CrossCuttingServices.csproj" />
+    <ProjectReference Include="..\Domain\Domain.csproj" />
     <ProjectReference Include="..\Presentation\Presentation.csproj" />
   </ItemGroup>
 

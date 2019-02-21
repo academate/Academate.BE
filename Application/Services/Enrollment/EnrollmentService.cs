@@ -1,4 +1,5 @@
 ﻿using Application.Dtos;
+using AutoMapper;
 using Cx.AccessControl.Application.Extensions;
 using Microsoft.AspNetCore.Http;
 using Repository.Course;
@@ -16,16 +17,19 @@ namespace Application.Services.Enrollment
         private readonly IExamRepository _examRepository;
         private readonly ICourseRepository _courseRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
 
         public EnrollmentService(IEnrollmentRepository enrollmentRepository,
             IExamRepository examRepository,
             ICourseRepository courseRepository,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            IMapper mapper)
         {
             _enrollmentRepository = enrollmentRepository;
             _examRepository = examRepository;
             _courseRepository = courseRepository;
             _httpContextAccessor = httpContextAccessor;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<ExamDto>> GetEnrolledExams()
@@ -36,7 +40,7 @@ namespace Application.Services.Enrollment
 
             var exams = (await _examRepository.GetExamsByCourseIds(enrolledCourses));
 
-            var examDtos = exams.Select(Map);
+            var examDtos = exams.Select(_mapper.Map<ExamDto>);
             return examDtos;
         }
 
@@ -44,7 +48,7 @@ namespace Application.Services.Enrollment
         {
             var userId = _httpContextAccessor.HttpContext.User.GetUserId();
             var enrolledCourses = (await _enrollmentRepository.GetEnrollmentsOfUser(userId))
-                .Select(e => e.CourseId);
+                .Select(e => e.CourseId).ToArray();
 
             var courses = (await _courseRepository.GetByIds(enrolledCourses)).ToDictionary(c => c.Id);
 
@@ -59,18 +63,6 @@ namespace Application.Services.Enrollment
             }
 
             return academicUnitsDto;
-        }
-
-        private ExamDto Map(Domain.Entities.Exam exam)
-        {
-            return new ExamDto
-            {
-                Id = exam.Id,
-                Title = exam.Title,
-                DateTime = exam.DateTime,
-                Duration = exam.Duration,
-                Type = exam.Type
-            };
         }
 
         private AcademicUnitDto Map(Domain.Entities.AcademicUnit academicUnit)
