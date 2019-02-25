@@ -1,4 +1,6 @@
-﻿namespace Application.Dtos
+﻿using System.Collections.Generic;
+
+namespace Application.Dtos
 {
     public class CourseDto
     {
@@ -11,5 +13,7 @@
         public string Description { get; set; }
 
         public SemesterDto Semester { get; set; }
+
+        public IEnumerable<ExamDto> Exams { get; set; }
     }
 }

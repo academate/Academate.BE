@@ -11,6 +11,10 @@ namespace hosting.Mappers
         {
             CreateMap<Course, CourseDto>();
             CreateMap<CourseDto, Course>();
+
+            CreateMap<Enrollment, UserCourseDto>();
+
+            CreateMap<SubmittedTask, SubmittedTaskDto>();
         }
     }
 }

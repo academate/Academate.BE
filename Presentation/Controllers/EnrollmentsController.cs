@@ -23,6 +23,15 @@ namespace Presentation.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet("/courses")]
+        public async Task<IActionResult> GetEnrolledCourses()
+        {
+            var courseDtos = await _enrollmentService.GetEnrolledCourses();
+            //var examViewModels = courseDtos.Select(_mapper.Map<EnrolledExamViewModel>);
+
+            return Ok(courseDtos);
+        }
+
         [HttpGet("/exams")]
         public async Task<IActionResult> GetEnrolledExams()
         {

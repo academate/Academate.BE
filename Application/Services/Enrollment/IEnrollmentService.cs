@@ -8,5 +8,6 @@ namespace Application.Services.Enrollment
     {
         Task<IEnumerable<ExamDto>> GetEnrolledExams();
         Task<IEnumerable<AcademicUnitDto>> GetEnrolledAcademicUnits();
+        Task<IEnumerable<UserCourseDto>> GetEnrolledCourses();
     }
 }

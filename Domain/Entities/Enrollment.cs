@@ -10,6 +10,8 @@ namespace Domain.Entities
 
         public int StudentId { get; set; }
 
+        public double? FinalGrade { get; set; }
+
         public EnrollmentStatus Status { get; set; }
 
         public bool Qualified { get; set; }
