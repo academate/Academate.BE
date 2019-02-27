@@ -32,6 +32,33 @@ namespace Application.Services.Enrollment
             _mapper = mapper;
         }
 
+        public async Task<IEnumerable<UserCourseDto>> GetEnrolledCourses()
+        {
+            var userId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var enrollments = (await _enrollmentRepository.GetEnrollmentsOfUser(userId)).ToArray();
+
+            var enrolledCoursesId = enrollments.Select(e => e.Id);
+            var userCourses = (await _courseService.GetCoursesByIds(enrolledCoursesId)).ToArray();
+
+            var userCoursesDto = enrollments.Select(_mapper.Map<UserCourseDto>).ToArray();
+            FillCourseExams(userCoursesDto, userCourses);
+
+            return userCoursesDto;
+        }
+
+        private static void FillCourseExams(IEnumerable<UserCourseDto> userCoursesDto, CourseDto[] userCourses)
+        {
+            foreach (var userCourseDto in userCoursesDto)
+            {
+                var relevantCourse = userCourses.FirstOrDefault(c => c.Id == userCourseDto.CourseId);
+                if (relevantCourse == null)
+                    continue;
+
+                userCourseDto.SemesterId = relevantCourse.Semester.Id;
+                userCourseDto.CourseExams = relevantCourse.Exams;
+            }
+        }
+
         public async Task<IEnumerable<ExamDto>> GetEnrolledExams()
         {
             var userId = _httpContextAccessor.HttpContext.User.GetUserId();

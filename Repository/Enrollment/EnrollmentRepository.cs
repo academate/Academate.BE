@@ -19,12 +19,12 @@ namespace Repository.Enrollment
 
         public async Task<IEnumerable<Domain.Entities.Enrollment>> GetEnrollmentsOfUser(int userId)
         {
-            var enrolls = await _dbContext.Enrollments
+            var enrollments = await _dbContext.Enrollments
                 .AsNoTracking()
                 .Where(e => e.StudentId == userId && e.Status == EnrollmentStatus.Active)
                 .ToArrayAsync();
 
-            return enrolls;
+            return enrollments;
         }
     }
 }

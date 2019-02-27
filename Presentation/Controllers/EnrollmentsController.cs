@@ -1,4 +1,5 @@
-﻿using Application.Services.Enrollment;
+﻿using Application.Dtos;
+using Application.Services.Enrollment;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,6 +22,15 @@ namespace Presentation.Controllers
         {
             _enrollmentService = enrollmentService;
             _mapper = mapper;
+        }
+
+        [HttpGet("/courses")]
+        public async Task<IActionResult> GetEnrolledCourses()
+        {
+            var courseDtos = await _enrollmentService.GetEnrolledCourses();
+            var examViewModels = courseDtos.Select(_mapper.Map<UserCourseViewModel>);
+
+            return Ok(examViewModels);
         }
 
         [HttpGet("/exams")]

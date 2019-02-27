@@ -38,6 +38,7 @@ namespace Repository.Course
             var course = await _dbContext.Courses
                 .Where(c => courseIds.Contains(c.Id))
                 .Include(c => c.Semester)
+                .Include(c => c.Exams)
                 .ToArrayAsync();
 
             return course;
