@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using System;
 
-namespace Application.Dtos
+namespace Presentation.ViewModels
 {
     public class SubmittedTaskViewModel
     {

@@ -54,6 +54,7 @@ namespace Application.Services.Enrollment
                 if (relevantCourse == null)
                     continue;
 
+                userCourseDto.Title = relevantCourse.Title;
                 userCourseDto.SemesterId = relevantCourse.Semester.Id;
                 userCourseDto.CourseExams = relevantCourse.Exams;
             }

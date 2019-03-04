@@ -1,6 +1,7 @@
 ﻿using Application.Dtos;
 using AutoMapper;
 using Domain.Entities;
+using Presentation.ViewModels;
 
 namespace hosting.Mappers
 {

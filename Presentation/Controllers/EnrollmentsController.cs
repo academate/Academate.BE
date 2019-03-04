@@ -1,5 +1,4 @@
-﻿using Application.Dtos;
-using Application.Services.Enrollment;
+﻿using Application.Services.Enrollment;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

@@ -1,11 +1,12 @@
-﻿using Presentation.ViewModels;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Application.Dtos
+namespace Presentation.ViewModels
 {
     public class UserCourseViewModel
     {
         public int CourseId { get; set; }
+
+        public string Title { get; set; }
 
         public double? FinalGrade { get; set; }
 
