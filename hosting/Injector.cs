@@ -1,7 +1,7 @@
 ﻿using Application.Services.AccessControl;
 using Application.Services.Configuration;
 using Application.Services.Course;
-using Application.Services.Enrollment;
+using Application.Services.Enrollments;
 using Application.Services.Exam;
 using CrossCuttingServices;
 using Microsoft.Extensions.DependencyInjection;

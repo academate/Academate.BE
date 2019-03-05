@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Application.Services.Enrollment
+namespace Application.Services.Enrollments
 {
     public class EnrollmentService : IEnrollmentService
     {
@@ -46,6 +46,19 @@ namespace Application.Services.Enrollment
             return userCoursesDto;
         }
 
+        public async Task<EnrollmentDto> GetEnrollment(int enrollmentId)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.GetUserId();
+            var enrollment = await _enrollmentRepository.GetEnrollment(enrollmentId);
+
+            if (enrollment == null || enrollment.StudentId != userId)
+            {
+                return null;
+            }
+
+            return _mapper.Map<EnrollmentDto>(enrollment);
+        }
+
         private static void FillCourseExams(IEnumerable<UserCourseDto> userCoursesDto, CourseDto[] userCourses)
         {
             foreach (var userCourseDto in userCoursesDto)
@@ -54,6 +67,7 @@ namespace Application.Services.Enrollment
                 if (relevantCourse == null)
                     continue;
 
+                userCourseDto.Title = relevantCourse.Title;
                 userCourseDto.SemesterId = relevantCourse.Semester.Id;
                 userCourseDto.CourseExams = relevantCourse.Exams;
             }

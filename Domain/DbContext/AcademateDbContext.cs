@@ -120,14 +120,23 @@ namespace Domain.DbContext
             modelBuilder.Entity<Semester>().HasData(
                 new Semester
                 {
-                    Id = 1, StartDate = DateTime.UtcNow,
-                    EndDate = DateTime.UtcNow.AddMonths(3), Description = "Semester A"
+                    Id = 1,
+                    StartDate = DateTime.UtcNow,
+                    EndDate = DateTime.UtcNow.AddMonths(3),
+                    Description = "Semester A"
                 });
 
             modelBuilder.Entity<Enrollment>().HasData(
-                new Enrollment { Id = 1, StudentId = 1, CourseId = 1, Status = EnrollmentStatus.Active },
-                new Enrollment { Id = 2, StudentId = 1, CourseId = 2, Status = EnrollmentStatus.Active }
+                new Enrollment { Id = 1, StudentId = 1, CourseId = 1, Status = EnrollmentStatus.Active, FinalGrade = 95 },
+                new Enrollment { Id = 2, StudentId = 1, CourseId = 2, Status = EnrollmentStatus.Active, FinalGrade = 80 }
             );
+
+            modelBuilder.Entity<SubmittedTask>().HasData(
+                new SubmittedTask { Id = 1, Title = "TermA", EnrollmentId = 1, DateTime = DateTime.UtcNow.AddDays(-3), Grade = 100, TaskType = TaskType.Exam },
+                new SubmittedTask { Id = 2, Title = "HW 1", EnrollmentId = 1, DateTime = DateTime.UtcNow.AddDays(-5), Grade = 80, TaskType = TaskType.HW },
+                new SubmittedTask { Id = 3, Title = "Term B", EnrollmentId = 2, DateTime = DateTime.UtcNow.AddDays(-1), Grade = 90, TaskType = TaskType.Exam },
+                new SubmittedTask { Id = 4, Title = "Hw 4", EnrollmentId = 2, DateTime = DateTime.UtcNow.AddDays(-2), Grade = 70, TaskType = TaskType.HW }
+                );
         }
 
         private static void OnUserCreating(ModelBuilder modelBuilder)
@@ -218,7 +227,8 @@ namespace Domain.DbContext
         {
             modelBuilder.Entity<Enrollment>()
                 .HasMany(e => e.SubmittedTasks)
-                .WithOne(s => s.Enrollment);
+                .WithOne(s => s.Enrollment)
+                .HasForeignKey(s => s.EnrollmentId);
 
         }
 

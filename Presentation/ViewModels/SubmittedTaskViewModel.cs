@@ -1,10 +1,12 @@
 ﻿using Domain.Entities;
 using System;
 
-namespace Application.Dtos
+namespace Presentation.ViewModels
 {
     public class SubmittedTaskViewModel
     {
+        public string Title { get; set; }
+
         public TaskType TaskType { get; set; }
 
         public DateTime DateTime { get; set; }
