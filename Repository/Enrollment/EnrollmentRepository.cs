@@ -26,5 +26,15 @@ namespace Repository.Enrollment
 
             return enrollments;
         }
+
+        public async Task<Domain.Entities.Enrollment> GetEnrollment(int enrollmentId)
+        {
+            var enrollment = await _dbContext.Enrollments
+                .Include(e => e.SubmittedTasks)
+                .Include(e => e.Course)
+                .FirstOrDefaultAsync(e => e.Id == enrollmentId);
+
+            return enrollment;
+        }
     }
 }

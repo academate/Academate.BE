@@ -6,5 +6,7 @@ namespace Repository.Enrollment
     public interface IEnrollmentRepository
     {
         Task<IEnumerable<Domain.Entities.Enrollment>> GetEnrollmentsOfUser(int userId);
+
+        Task<Domain.Entities.Enrollment> GetEnrollment(int enrollmentId);
     }
 }

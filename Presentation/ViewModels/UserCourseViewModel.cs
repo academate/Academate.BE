@@ -6,13 +6,13 @@ namespace Presentation.ViewModels
     {
         public int CourseId { get; set; }
 
+        public int EnrollmentId { get; set; }
+
         public string Title { get; set; }
 
         public double? FinalGrade { get; set; }
 
         public bool Qualified { get; set; }
-
-        public IEnumerable<SubmittedTaskViewModel> SubmittedTasks { get; set; }
 
         public int SemesterId { get; set; }
 

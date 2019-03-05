@@ -13,13 +13,12 @@ namespace hosting.Mappers
             CreateMap<Course, CourseDto>();
             CreateMap<CourseDto, Course>();
 
-            CreateMap<Enrollment, UserCourseDto>();
-
-            CreateMap<SubmittedTask, SubmittedTaskDto>();
+            CreateMap<Enrollment, UserCourseDto>()
+                .ForMember(dest => dest.EnrollmentId,
+                    source => source.MapFrom(src => src.Id));
 
             CreateMap<UserCourseDto, UserCourseViewModel>();
 
-            CreateMap<SubmittedTaskDto, SubmittedTaskViewModel>();
         }
     }
 }
