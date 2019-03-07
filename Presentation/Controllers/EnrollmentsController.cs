@@ -24,7 +24,7 @@ namespace Presentation.Controllers
         }
 
 
-        [HttpGet("/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetEnrollment(int id)
         {
             var enrollmentDto = await _enrollmentService.GetEnrollment(id);
