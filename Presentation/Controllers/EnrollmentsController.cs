@@ -33,7 +33,7 @@ namespace Presentation.Controllers
             return Ok(enrollmentViewModel);
         }
 
-        [HttpGet("/courses")]
+        [HttpGet("courses")]
         public async Task<IActionResult> GetEnrolledCourses()
         {
             var courseDtos = await _enrollmentService.GetEnrolledCourses();
@@ -42,7 +42,7 @@ namespace Presentation.Controllers
             return Ok(examViewModels);
         }
 
-        [HttpGet("/exams")]
+        [HttpGet("exams")]
         public async Task<IActionResult> GetEnrolledExams()
         {
             var examDtos = await _enrollmentService.GetEnrolledExams();
@@ -51,7 +51,7 @@ namespace Presentation.Controllers
             return Ok(examViewModels);
         }
 
-        [HttpGet("/lessons")]
+        [HttpGet("lessons")]
         public async Task<IActionResult> GetEnrolledAcademicUnits()
         {
             var academicUnitsDto = await _enrollmentService.GetEnrolledAcademicUnits();
